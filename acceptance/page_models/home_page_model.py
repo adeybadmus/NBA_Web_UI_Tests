@@ -12,5 +12,5 @@ class HomePage(BasePage):
         return self.driver.find_element(*HomePageLocators.standings_menu)
 
     @property
-    def click_home_page_menu_item(self):
-        return self.driver.find_element(*HomePageLocators.homepage_menu_item)
+    def click_players_menu_item(self):
+        return self.driver.find_element(*HomePageLocators.players_menu)

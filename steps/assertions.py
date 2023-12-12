@@ -1,6 +1,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from behave import *
+
+from acceptance.locators.free_agent_tracker_page_locator import FreeAgentTrackerPageLocators
 from acceptance.locators.standings_page_locator import StandingsPageLocators
 from acceptance.page_models.home_page_model import HomePage
 
@@ -33,3 +35,35 @@ def step_impl(context, expected_item, i=0):
         assert expected_item.lower() in actual_url, f'{expected_item} is not contained in {actual_url}'
 
     context.browser.quit()
+
+
+@Then('the New Team detail must be displayed for "(.*)" and they should not change')
+def step_impl(context, text, i=0):
+    WebDriverWait(context.browser, timeout=2)
+    new_team_data = context.browser.find_elements(*FreeAgentTrackerPageLocators.news_data)
+
+    if text == "Signed":
+        assert new_team_data[i].text is not None, f'{new_team_data[i].text} is null'
+
+    elif text == "Unsigned":
+        assert 'sign' not in new_team_data[i].text.lower(), f'sign not in {new_team_data[i].text}'
+
+    context.browser.quit()
+
+
+@Then('I should see the record for "(.*)" player name displayed and they should not change')
+def step_impl(context, player_name, i=0):
+
+    name_data = context.browser.find_elements(*FreeAgentTrackerPageLocators.name_data)
+
+    if player_name == "valid":
+        name_data_value = context.browser.find_elements(*FreeAgentTrackerPageLocators.name_data)[i].text
+
+        assert name_data[i].text == name_data_value, f'{name_data_value} is not = {name_data[i].text}'
+
+    elif player_name == "invalid":
+        error_message = context.browser.find_element(*FreeAgentTrackerPageLocators.no_matched_player_error_message)
+        assert error_message.text == 'No players matched your selected filters'
+
+    context.browser.quit()
+
