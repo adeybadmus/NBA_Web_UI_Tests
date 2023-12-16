@@ -3,6 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from behave import *
 
 from acceptance.locators.free_agent_tracker_page_locator import FreeAgentTrackerPageLocators
+from acceptance.page_models.free_agent_tracker_page_model import FreeAgentTrackerPage
 from acceptance.locators.standings_page_locator import StandingsPageLocators
 from acceptance.page_models.home_page_model import HomePage
 
@@ -52,18 +53,38 @@ def step_impl(context, text, i=0):
 
 
 @Then('I should see the record for "(.*)" player name displayed and they should not change')
-def step_impl(context, player_name, i=0):
+def step_impl(context, player_name):
 
-    name_data = context.browser.find_elements(*FreeAgentTrackerPageLocators.name_data)
-
+    WebDriverWait(context.browser, timeout=2)
     if player_name == "valid":
-        name_data_value = context.browser.find_elements(*FreeAgentTrackerPageLocators.name_data)[i].text
+        context.expected_name_data
+        actual_name_data = context.browser.find_element(*FreeAgentTrackerPageLocators.name_data)
 
-        assert name_data[i].text == name_data_value, f'{name_data_value} is not = {name_data[i].text}'
+        assert actual_name_data.text == context.expected_name_data, f'{actual_name_data.text} is not = {context.expected_name_data}'
 
     elif player_name == "invalid":
+        WebDriverWait(context.browser, timeout=2)
         error_message = context.browser.find_element(*FreeAgentTrackerPageLocators.no_matched_player_error_message)
-        assert error_message.text == 'No players matched your selected filters'
+        assert error_message.text == 'NO PLAYERS MATCHED YOUR SELECTED FILTERS', f'{error_message.text} is not = NO PLAYERS MATCHED YOUR SELECTED FILTERS'
 
     context.browser.quit()
 
+
+@Then('I should see the correct stats displayed for "Chicago (.*)" and they should not change')
+def step_impl(context, expected_old_team_logo, i=0):
+    actual_team_logo = context.browser.find_elements(*FreeAgentTrackerPageLocators.old_team_logo)
+    link = actual_team_logo[i].get_attribute('href')
+    assert expected_old_team_logo.lower() in link.lower(), f'{expected_old_team_logo} is not contained in {link}'
+
+
+@Then('I should see the correct stats displayed for "LA (.*)" and they should not change')
+def step_impl(context, expected_new_team_logo, i=0):
+    actual_new_team_logo = context.browser.find_elements(*FreeAgentTrackerPageLocators.new_team_logo)
+    logo_link = actual_new_team_logo[i].get_attribute('href')
+    assert expected_new_team_logo.lower() in logo_link.lower(), f'{expected_new_team_logo} is not contained in {logo_link}'
+
+
+@Then('I should see the correct stats displayed for "(.*)" and they should not change')
+def step_impl(context, expected_position, i=0):
+    actual_position = context.browser.find_elements(*FreeAgentTrackerPageLocators.position_record)
+    assert expected_position.lower() in actual_position[i].text.lower(), f'{expected_position} is not contained in {actual_position[i].text.lower()}'
