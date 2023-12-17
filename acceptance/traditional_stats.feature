@@ -4,14 +4,9 @@ Feature: Traditional_Stats_Page_Feature
   In order get valid stats of teams
 
   Background:
-	 Given I am on the "Tradition Stats" page
+	 Given I am on the "Traditional" page
 
-  Scenario Outline: Free_Agent_Tracker_01 Test Player Availability
-    When click "Players" on the menu
-    And I click on "Fire Agent Tracker"
-    And I select the "<text>" for Availability
-    Then the New Team detail must be displayed for "<text>" and they should not change
-    Examples:
-    |text|
-    |Signed|
-    |Unsigned|
+  Scenario: Tradition_Stats_Feature_01 Test Season Filter
+    When I filter by season values "2018-19"
+    Then I should see the Pills value equal to the correct season value selected
+
