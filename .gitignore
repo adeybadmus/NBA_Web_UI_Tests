@@ -1,1 +1,3 @@
 NBA_Web_UI_Tests-env
+acceptance/locators/traditional_stats_page_locators.py
+acceptance/page_models/traditional_stats_page_model.py

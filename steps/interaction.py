@@ -17,6 +17,7 @@ use_step_matcher('re')
 @When('click "Standings" on the menu')
 def step_impl(context):
     context.browser.find_element(*HomePageLocators.standings_menu).click()
+    WebDriverWait(context.browser, timeout=2)
     eastern_conference = context.browser.find_element(*StandingsPageLocators.eastern_conference)
     eastern_conference.is_displayed()
 
@@ -50,43 +51,37 @@ def step_impl(context, text):
 def step_impl(context, player_name):
     page = FreeAgentTrackerPage(context.browser)
     if player_name == "valid":
-        page.name_data.is_displayed()
-        context.expected_name_data = page.name_data.text
-        page.name_search_box.is_displayed()
-        page.name_search_box.clear()
-        page.name_search_box.send_keys(context.expected_name_data)
+        # expected_name_data = page.search_valid_player()
+        # context.expected_name_data = expected_name_data
+
+        name_data = page.name_data
+        name_data.is_displayed()
+        context.expected_name_data = name_data.text
+        page.search_valid_player(context.expected_name_data)
+        # name_search_box = page.name_search_box
+        # name_search_box.is_displayed()
+        # name_search_box.clear()
+        # name_search_box.send_keys(context.expected_name_data)
 
     elif player_name == "invalid":
-        letters = string.ascii_letters.lower()
-        invalid_name_data = ''.join(random.choice(letters) for i in range(10))
-        page.name_search_box.is_displayed()
-        page.name_search_box.clear()
-        page.name_search_box.send_keys(invalid_name_data)
+        page.search_invalid_player()
 
 
-@When('I filter by Old team values "Chicago Bulls"')
-def step_impl(context):
+@When('I filter by Old team values (.*)')
+def step_impl(context, old_team):
     page = FreeAgentTrackerPage(context.browser)
-    page.old_team_filter.is_displayed()
-    page.old_team_filter.click()
-    page.chicago_bulls.click()
-    page.chicago_bulls.is_selected()
+    page.filter_by_old_team(old_team)
 
 
-@When('I filter by New team values "LA Clippers"')
-def step_impl(context):
+@When('I filter by New team values (.*)')
+def step_impl(context, new_team):
     page = FreeAgentTrackerPage(context.browser)
-    page.new_team_filter.is_displayed()
-    page.new_team_filter.click()
-    page.la_clippers.click()
-    page.la_clippers.is_selected()
+    page.filter_by_new_team(new_team)
 
 
-@When('I filter by Position values "Guard"')
-def step_impl(context):
+@When('I filter by Position values (.*)')
+def step_impl(context, position):
     page = FreeAgentTrackerPage(context.browser)
-    page.player_position_filter.is_displayed()
-    page.player_position_filter.click()
-    page.guard.click()
-    page.guard.is_selected()
+    WebDriverWait(context.browser, timeout=2)
+    page.filter_by_player_position(position)
 
