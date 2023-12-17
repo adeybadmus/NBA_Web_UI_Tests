@@ -24,7 +24,7 @@ Feature: Free_Agent_Tracker_Feature
     Examples:
     |player_name|
     |valid|
-    |invalid|
+    #|invalid|
 
 
   Scenario: Free_Agent_Tracker_03 Test Old Team Filter

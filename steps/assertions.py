@@ -34,7 +34,6 @@ def step_impl(context, expected_item, i=0):
 
     elif list_menu_item[i].text == expected_item:
         assert expected_item.lower() in actual_url, f'{expected_item} is not contained in {actual_url}'
-
     context.browser.quit()
 
 
@@ -48,7 +47,6 @@ def step_impl(context, text, i=0):
 
     elif text == "Unsigned":
         assert 'sign' not in new_team_data[i].text.lower(), f'sign not in {new_team_data[i].text}'
-
     context.browser.quit()
 
 
@@ -66,7 +64,6 @@ def step_impl(context, player_name):
         WebDriverWait(context.browser, timeout=2)
         error_message = context.browser.find_element(*FreeAgentTrackerPageLocators.no_matched_player_error_message)
         assert error_message.text == 'NO PLAYERS MATCHED YOUR SELECTED FILTERS', f'{error_message.text} is not = NO PLAYERS MATCHED YOUR SELECTED FILTERS'
-
     context.browser.quit()
 
 
@@ -75,6 +72,7 @@ def step_impl(context, expected_old_team_logo, i=0):
     actual_team_logo = context.browser.find_elements(*FreeAgentTrackerPageLocators.old_team_logo)
     link = actual_team_logo[i].get_attribute('href')
     assert expected_old_team_logo.lower() in link.lower(), f'{expected_old_team_logo} is not contained in {link}'
+    context.browser.quit()
 
 
 @Then('I should see the correct stats displayed for "LA (.*)" and they should not change')
@@ -82,9 +80,11 @@ def step_impl(context, expected_new_team_logo, i=0):
     actual_new_team_logo = context.browser.find_elements(*FreeAgentTrackerPageLocators.new_team_logo)
     logo_link = actual_new_team_logo[i].get_attribute('href')
     assert expected_new_team_logo.lower() in logo_link.lower(), f'{expected_new_team_logo} is not contained in {logo_link}'
+    context.browser.quit()
 
 
 @Then('I should see the correct stats displayed for "(.*)" and they should not change')
 def step_impl(context, expected_position, i=0):
     actual_position = context.browser.find_elements(*FreeAgentTrackerPageLocators.position_record)
-    assert expected_position.lower() in actual_position[i].text.lower(), f'{expected_position} is not contained in {actual_position[i].text.lower()}'
+    assert expected_position.lower() in actual_position[i].text.lower(), f'{expected_position.lower()} is not contained in {actual_position[i].text.lower()}'
+    context.browser.quit()

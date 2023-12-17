@@ -2,6 +2,6 @@ from selenium.webdriver.common.by import By
 
 
 class StandingsPageLocators:
-    eastern_conference = By.XPATH, '//*[@id="__next"]/div[2]/div[2]/div[2]/section[2]/div/div[2]/h2'
-    eastern_teams = By.XPATH, '//*[@id="__next"]/div[2]/div[2]/div[2]/section[2]/div/div[2]/div[2]/table/tbody/tr'
+    eastern_conference = By.XPATH, '*//div[@class="Crom_base__f0niE"] /h2[text()="Eastern Conference"]'
+    eastern_teams = By.XPATH, '*//div[@class="Crom_base__f0niE"] //table/tbody/tr'
 
