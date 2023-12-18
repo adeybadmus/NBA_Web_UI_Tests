@@ -36,9 +36,4 @@ Feature: Traditional_Stats_Page_Feature
     |season |2020-21|season_type|In-Season Tournament|
     |season_type|Playoffs|per_mode|Per 1 Play|
     |season     |2007-08  |season_segment|Last 10 Games|
-
-
-
-  Scenario: Tradition_Stats_Feature_06 Test Multiple Filters - Season and Season Type
-    When I filter by "season" value "2022-23" and "season_type" value "In-Season Tournament"
-    Then I should see the Pills values equal to the correct values "2022-23" and "IST"
+    |season_type    |All Star  |per_mode|Per Game|
