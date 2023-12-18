@@ -6,6 +6,7 @@ from acceptance.locators.free_agent_tracker_page_locator import FreeAgentTracker
 from acceptance.page_models.free_agent_tracker_page_model import FreeAgentTrackerPage
 from acceptance.locators.standings_page_locator import StandingsPageLocators
 from acceptance.page_models.home_page_model import HomePage
+from acceptance.page_models.traditional_stats_page_model import TraditionalStatsPage
 
 use_step_matcher('re')
 
@@ -52,7 +53,6 @@ def step_impl(context, text, i=0):
 
 @Then('I should see the record for "(.*)" player name displayed and they should not change')
 def step_impl(context, player_name):
-
     WebDriverWait(context.browser, timeout=2)
     if player_name == "valid":
         context.expected_name_data
@@ -86,5 +86,35 @@ def step_impl(context, expected_new_team_logo, i=0):
 @Then('I should see the correct stats displayed for "(.*)" and they should not change')
 def step_impl(context, expected_position, i=0):
     actual_position = context.browser.find_elements(*FreeAgentTrackerPageLocators.position_record)
-    assert expected_position.lower() in actual_position[i].text.lower(), f'{expected_position.lower()} is not contained in {actual_position[i].text.lower()}'
+    assert expected_position.lower() in actual_position[
+        i].text.lower(), f'{expected_position.lower()} is not contained in {actual_position[i].text.lower()}'
+    context.browser.quit()
+
+
+@Then('I should see the Pills value equal to the correct value "(.*)"')
+def step_impl(context, selected_value):
+    page = TraditionalStatsPage(context.browser)
+    actual_pill = page.validate_pills_value(selected_value)
+
+    assert selected_value.lower() == actual_pill.text.lower(), f'{selected_value.lower()} != {actual_pill.text.lower()}'
+    context.browser.quit()
+
+
+@Then('I should see the Pills values equal to the correct values "(.*)" and "(.*)"')
+def step_impl(context, selected_value1, selected_value2):
+    page = TraditionalStatsPage(context.browser)
+    if selected_value1 == 'In-Season Tournament':
+        actual_ist_pill = context.browser.find_element(By.XPATH, '*//div/span[text()="IST"]')
+        assert 'IST'.lower() == actual_ist_pill.text.lower(), f'{selected_value1.lower()} != {actual_ist_pill.text.lower()}'
+    elif selected_value1 != 'In-Season Tournament':
+        actual_pill1 = page.validate_pills_value(selected_value1)
+        assert selected_value1.lower() == actual_pill1.text.lower(), f'{selected_value1.lower()} != {actual_pill1.text.lower()}'
+
+    if selected_value2 == 'In-Season Tournament':
+        actual_ist_pill = context.browser.find_element(By.XPATH, '*//div/span[text()="IST"]')
+        assert 'IST'.lower() == actual_ist_pill.text.lower(), f'ist != {actual_ist_pill.text.lower()}'
+
+    elif selected_value2 != 'In-Season Tournament':
+        actual_pill2 = page.validate_pills_value(selected_value2)
+        assert selected_value2.lower() == actual_pill2.text.lower(), f'{selected_value2.lower()} != {actual_pill2.text.lower()}'
     context.browser.quit()

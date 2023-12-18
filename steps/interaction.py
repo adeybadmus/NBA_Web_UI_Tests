@@ -10,6 +10,7 @@ from acceptance.locators.free_agent_tracker_page_locator import FreeAgentTracker
 from acceptance.locators.home_page_locator import HomePageLocators
 from acceptance.locators.standings_page_locator import StandingsPageLocators
 from acceptance.page_models.free_agent_tracker_page_model import FreeAgentTrackerPage
+from acceptance.page_models.traditional_stats_page_model import TraditionalStatsPage
 
 use_step_matcher('re')
 
@@ -51,17 +52,10 @@ def step_impl(context, text):
 def step_impl(context, player_name):
     page = FreeAgentTrackerPage(context.browser)
     if player_name == "valid":
-        # expected_name_data = page.search_valid_player()
-        # context.expected_name_data = expected_name_data
-
         name_data = page.name_data
         name_data.is_displayed()
         context.expected_name_data = name_data.text
         page.search_valid_player(context.expected_name_data)
-        # name_search_box = page.name_search_box
-        # name_search_box.is_displayed()
-        # name_search_box.clear()
-        # name_search_box.send_keys(context.expected_name_data)
 
     elif player_name == "invalid":
         page.search_invalid_player()
@@ -85,3 +79,38 @@ def step_impl(context, position):
     WebDriverWait(context.browser, timeout=2)
     page.filter_by_player_position(position)
 
+
+@When('I filter by season "(.*)" value "(.*)"')
+def step_impl(context, filter_type, season):
+    page = TraditionalStatsPage(context.browser)
+    WebDriverWait(context.browser, timeout=2)
+    page.filter_by_season(filter_type, season)
+
+
+@When('I filter by season_type "(.*)" value "(.*)"')
+def step_impl(context, filter_type, season_type):
+    page = TraditionalStatsPage(context.browser)
+    WebDriverWait(context.browser, timeout=2)
+    page.filter_by_season_type(filter_type, season_type)
+
+
+@When('I filter by per_mode "(.*)" value "(.*)"')
+def step_impl(context, filter_type, per_mode):
+    page = TraditionalStatsPage(context.browser)
+    WebDriverWait(context.browser, timeout=2)
+    page.filter_by_per_mode(filter_type, per_mode)
+
+
+@When('I filter by season_segment "(.*)" value "(.*)"')
+def step_impl(context, filter_type, season_segment):
+    page = TraditionalStatsPage(context.browser)
+    WebDriverWait(context.browser, timeout=2)
+    page.filter_by_per_mode(filter_type, season_segment)
+
+
+@When('I filter by "(.*)" value "(.*)" and "(.*)" value "(.*)"')
+def step_impl(context, filter_type1, value1, filter_type2, value2):
+    page = TraditionalStatsPage(context.browser)
+    WebDriverWait(context.browser, timeout=2)
+    page.filter_by_per_mode(filter_type1, value1)
+    page.filter_by_per_mode(filter_type2, value2)
